@@ -10,7 +10,7 @@ module OneLogin
     #
     class Settings
       def initialize(overrides = {})
-        config = DEFAULTS.merge(overrides)
+        config = DEFAULTS.deep_merge(overrides)
         config.each do |k,v|
           acc = "#{k.to_s}=".to_sym
           if respond_to? acc

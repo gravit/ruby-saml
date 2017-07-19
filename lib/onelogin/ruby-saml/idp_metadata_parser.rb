@@ -113,7 +113,8 @@ module OneLogin
           :idp_cert_multi => nil
         }.tap do |response_hash|
           merge_certificates_into(response_hash) unless certificates.nil?
-        end
+          merge_security_algos_into(response_hash) unless signature_method.nil? && digest_method.nil?
+       end
       end
 
       private
@@ -306,6 +307,30 @@ module OneLogin
         nodes.map(&:value)
       end
 
+      # @return [String|nil] the signature signing algorithm if it is specified
+      #
+      def signature_method
+        node = REXML::XPath.first(
+          entity_descriptor,
+          "ds:Signature/ds:SignedInfo/ds:SignatureMethod",
+          namespace
+        )
+
+        return node.attributes['Algorithm'] if node
+      end
+
+      # @return [String|nil] the digest algorithm if it is specified
+      #
+      def digest_method
+        node = REXML::XPath.first(
+          entity_descriptor,
+          "ds:Signature/ds:SignedInfo/ds:Reference/ds:DigestMethod",
+          namespace
+        )
+
+        return node.attributes['Algorithm'] if node
+      end
+
       def namespace
         {
           "md" => METADATA,
@@ -336,6 +361,13 @@ module OneLogin
           end
         else
           parsed_metadata[:idp_cert_multi] = certificates
+        end
+      end
+
+      def merge_security_algos_into(response_hash)
+        response_hash[:security] = Hash.new.tap do |security_hash|
+          security_hash[:signature_method] = signature_method unless signature_method.nil?
+          security_hash[:digest_method] = digest_method unless digest_method.nil?
         end
       end
 
