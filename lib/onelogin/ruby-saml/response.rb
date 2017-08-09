@@ -892,9 +892,14 @@ module OneLogin
       # @return [XMLSecurity::SignedDocument] The SAML Response with the assertion decrypted
       #
       def generate_decrypted_document
-        if settings.nil? || !settings.get_sp_key
-          raise ValidationError.new('An EncryptedAssertion found and no SP private key found on the settings to decrypt it. Be sure you provided the :settings parameter at the initialize method')
+        if settings.nil?
+          raise ValidationError.new('Settings were not available from the SAML Response object.')
         end
+
+        if !settings.get_sp_key
+          raise ValidationError.new('An EncryptedAssertion found and no SP private key found on the settings to decrypt it')
+        end
+
 
         # Marshal at Ruby 1.8.7 throw an Exception
         if RUBY_VERSION < "1.9"
