@@ -264,7 +264,7 @@ module OneLogin
 
           certs = nil
           unless signing_nodes.empty? && encryption_nodes.empty?
-            certs = {}
+            certs = HashWithIndifferentAccess.new
             unless signing_nodes.empty?
               certs['signing'] = []
               signing_nodes.each do |cert_node|
