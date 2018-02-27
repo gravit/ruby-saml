@@ -114,7 +114,7 @@ module OneLogin
           "./xenc:CipherData/xenc:CipherValue",
           { 'xenc' => XENC }
         )
-        node = Base64.decode64(cipher_value.text)
+        node = Base64.decode64(element_text(cipher_value))
         encrypt_method = REXML::XPath.first(
           encrypt_data,
           "./xenc:EncryptionMethod",
@@ -142,7 +142,7 @@ module OneLogin
           "./xenc:CipherData/xenc:CipherValue",
           { "ds" => DSIG, "xenc" => XENC }
         )
-        cipher_text = Base64.decode64(encrypted_symmetric_key_element.text)
+        cipher_text = Base64.decode64(element_text(encrypted_symmetric_key_element))
         encrypt_method = REXML::XPath.first(
           encrypted_key,
           "./xenc:EncryptionMethod",
@@ -219,6 +219,13 @@ module OneLogin
       # @return [Boolean]
       def self.original_uri_match?(destination_url, settings_url)
         destination_url == settings_url
+      end
+
+      # Given a REXML::Element instance, return the concatenation of all child text nodes. Assumes
+      # that there all children other than text nodes can be ignored (e.g. comments). If nil is
+      # passed, nil will be returned.
+      def self.element_text(element)
+        element.texts.join if element
       end
     end
   end
