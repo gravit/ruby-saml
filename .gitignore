@@ -12,3 +12,5 @@ test/Test.iml
 *.gem
 .bundle
 *.patch
+.ruby-version
+vendor

@@ -58,6 +58,8 @@ Gem::Specification.new do |s|
     # 1.9.x
     s.add_development_dependency('debugger-linecache', '~> 1.2.0')
     s.add_development_dependency('debugger', '~> 1.6.4')
+    # for es_tweaks branch to match our project
+    s.add_development_dependency('activesupport', '4.1.5')
   elsif RUBY_VERSION < '2.1'
     # 2.0.x
     s.add_development_dependency('byebug', '~> 2.1.1')

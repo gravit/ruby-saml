@@ -5,6 +5,7 @@ require "net/http"
 require "net/https"
 require "rexml/document"
 require "rexml/xpath"
+require "active_support/hash_with_indifferent_access"
 
 # Only supports SAML 2.0
 module OneLogin

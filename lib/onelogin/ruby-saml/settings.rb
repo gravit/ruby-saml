@@ -1,6 +1,7 @@
 require "xml_security"
 require "onelogin/ruby-saml/attribute_service"
 require "onelogin/ruby-saml/utils"
+require "active_support"
 
 # Only supports SAML 2.0
 module OneLogin
